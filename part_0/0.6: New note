@@ -1,0 +1,23 @@
+title Exercises 0.6: New note
+
+note over browser:
+browser starts executing js-code
+modify notes array and clear form data,
+then redraw list on page with DOM API
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over server:
+recive form data 
+{
+  note: some text, 
+  date: "2020-11-11T09:34:10.846Z"
+}
+end note
+
+server-->browser: HTTP 201 with response {"message":"note created"}
+
+note over browser:
+log response with console.log api
+end note
