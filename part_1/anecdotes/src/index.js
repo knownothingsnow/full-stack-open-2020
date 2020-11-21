@@ -6,6 +6,7 @@ const getRandomInt = (max) => Math.floor(Math.random() * Math.floor(max))
 
 const App = ({ anecdotes }) => {
   const [selected, setSelected] = useState(0)
+  const [mostVotesAnecdotes, setMostVotesAnecdotes] = useState('')
   const [votes, setVotes] = useState(Array(6).fill(0))
 
   const next = () => {
@@ -16,15 +17,27 @@ const App = ({ anecdotes }) => {
     const newVotes = [...votes]
     newVotes[selected] += 1
     setVotes(newVotes)
+
+    let max = 0
+    let maxIndex = 0
+    newVotes.forEach((item, index) => {
+      if (item > max) {
+        max = item
+        maxIndex = index
+      }
+    })
+
+    setMostVotesAnecdotes(anecdotes[maxIndex])
   }
 
   return (
     <div>
-      <div>
-        {anecdotes[selected]}
-      </div>
+      <h2>anecdotes</h2>
+      <div>{anecdotes[selected]}</div>
       <button onClick={vote}>vote</button>
       <button onClick={next}>next anecdote</button>
+      <h2>anecdotes with most votes</h2>
+      <div>{mostVotesAnecdotes}</div>
     </div>
   )
 }
