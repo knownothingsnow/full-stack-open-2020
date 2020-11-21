@@ -1,31 +1,30 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-const Header = (props) => (
-  <h1>{props.course}</h1>
+const Header = ({ course }) => (
+  <h1>{course}</h1>
 )
 
-const Content = (props) => (
+const Content = ({ parts }) => (
   <>
-    <Part part={props.parts[0]}></Part>
-    <Part part={props.parts[1]}></Part>
-    <Part part={props.parts[2]}></Part>
+    <Part part={parts[0]}></Part>
+    <Part part={parts[1]}></Part>
+    <Part part={parts[2]}></Part>
   </>
 )
 
-const Part = (props) => {
+const Part = ({ part }) => {
   return (
     <p>
-      {props.part.name} {props.part.exercises}
+      {part.name} {part.exercises}
     </p>
   )
 }
 
-const Total = (props) => {
-  const partsArr = props.parts
+const Total = ({ parts }) => {
   let total = 0
-  for (let i = 0; i < partsArr.length; i++) {
-    total += partsArr[i].exercises
+  for (let i = 0; i < parts.length; i++) {
+    total += parts[i].exercises
   }
   return (
     <p>Number of exercises {total}</p>
