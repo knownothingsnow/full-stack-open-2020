@@ -2,13 +2,20 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 const Statistics = ({ data }) => {
+  console.log('render!')
   const { good, neutral, bad } = data
   const all = good + neutral + bad
   const average = (good - bad) / all || 0
   const positive = good / all || 0
 
+  if ((good === 0) && (neutral === 0) && (bad === 0)) {
+    return (
+      <div>no feedback given</div>
+    )
+  }
+
   return (
-    <div>
+    <div >
       <h2>statistics</h2>
       <div>good: {good}</div>
       <div>neutral: {neutral}</div>
@@ -18,6 +25,7 @@ const Statistics = ({ data }) => {
       <div>positive: {positive}</div>
     </div>
   )
+
 }
 
 const App = () => {
