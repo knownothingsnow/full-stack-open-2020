@@ -13,6 +13,10 @@ const App = () => {
     if (flag === 'bad') return () => setBad(bad + 1)
   }
 
+  const all = good + neutral + bad
+  const average = (good - bad) / all || 0
+  const positive = good / all || 0
+
   return (
     <div>
       <div>
@@ -27,6 +31,9 @@ const App = () => {
         <div>good: {good}</div>
         <div>neutral: {neutral}</div>
         <div>bad: {bad}</div>
+        <div>all: {all}</div>
+        <div>average: {average}</div>
+        <div>positive: {positive}</div>
       </div>
     </div>
   )
