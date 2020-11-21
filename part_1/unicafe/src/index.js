@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
+const Statistic = ({ title, number }) => <div>{title}: {number}</div>
+
 const Statistics = ({ data }) => {
-  console.log('render!')
   const { good, neutral, bad } = data
   const all = good + neutral + bad
   const average = (good - bad) / all || 0
@@ -17,16 +18,18 @@ const Statistics = ({ data }) => {
   return (
     <div >
       <h2>statistics</h2>
-      <div>good: {good}</div>
-      <div>neutral: {neutral}</div>
-      <div>bad: {bad}</div>
-      <div>all: {all}</div>
-      <div>average: {average}</div>
-      <div>positive: {positive}</div>
+      <Statistic title="good" number={good}></Statistic>
+      <Statistic title="neutral" number={neutral}></Statistic>
+      <Statistic title="bad" number={bad}></Statistic>
+      <Statistic title="all" number={all}></Statistic>
+      <Statistic title="average" number={average}></Statistic>
+      <Statistic title="positive" number={positive}></Statistic>
     </div>
   )
 
 }
+
+const Button = ({ title, handler }) => <button onClick={handler(title)}>{title}</button>
 
 const App = () => {
   // save clicks of each button to own state
@@ -44,9 +47,9 @@ const App = () => {
     <div>
       <div>
         <h2>give feedback</h2>
-        <button onClick={addCount('good')}>good</button>
-        <button onClick={addCount('neutral')}>neutral</button>
-        <button onClick={addCount('bad')}>bad</button>
+        <Button title="good" handler={addCount}></Button>
+        <Button title="neutral" handler={addCount}></Button>
+        <Button title="bad" handler={addCount}></Button>
       </div>
 
       <Statistics data={{ good, neutral, bad }}></Statistics>
