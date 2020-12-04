@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/filter'
 import PersonForm from './components/personForm'
 import Persons from './components/persons'
-import './App.css';
+import './App.css'
 
 import axios from 'axios'
 
@@ -36,24 +36,27 @@ const App = () => {
   const submitName = (e) => {
     e.preventDefault()
     // prevent duplicate person name
-    for (let person of persons.values()) {
+    for (const person of persons.values()) {
       if (person.name === newName) {
-        alert(`${newName} is already added to phonebook`)
+        window.alert(`${newName} is already added to phonebook`)
         return
       }
     }
 
-    const newPersons = [
-      ...persons,
-      {
-        name: newName,
-        number: newNumber
-      }
-    ]
-    setPersons(newPersons)
-    // reset searcher after add new person
-    setPersonsToShow(newPersons)
-    setSearcher('')
+    axios.post('http://localhost:3001/persons', {
+      name: newName,
+      number: newNumber
+    })
+      .then(res => {
+        const newPersons = [
+          ...persons,
+          res.data
+        ]
+        setPersons(newPersons)
+        // reset searcher after add new person
+        setPersonsToShow(newPersons)
+        setSearcher('')
+      })
   }
 
   return (
@@ -64,7 +67,7 @@ const App = () => {
         setPersonsToShow={setPersonsToShow}
         searcher={searcher}
         setSearcher={setSearcher}
-      ></Filter>
+      />
       <h2>add a new</h2>
       <PersonForm
         submitName={submitName}
@@ -72,12 +75,12 @@ const App = () => {
         nameHandler={nameHandler}
         newNumber={newNumber}
         numberHandler={numberHandler}
-      ></PersonForm>
+      />
 
       <h2>Numbers</h2>
       <Persons
         personsToShow={personsToShow}
-      ></Persons>
+      />
     </div>
   )
 }
