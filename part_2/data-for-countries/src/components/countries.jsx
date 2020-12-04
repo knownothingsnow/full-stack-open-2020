@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
+import Weather from './weather'
 
-function Countries({ filteredCountries }) {
+function Countries ({ filteredCountries }) {
   const [areaOfShownCountry, setAreaOfShownCountry] = useState(0)
 
   const showCountries = area => {
@@ -29,11 +30,12 @@ function Countries({ filteredCountries }) {
               <ul>
                 {country.languages.map(language => <li key={language.iso639_2}>{language.name}</li>)}
               </ul>
+              <img src={country.flag} style={{ width: '10%' }} />
+              <Weather country={country} />
             </div>
           </div>
-        ))
-        }
-      </div >
+        ))}
+      </div>
     )
   }
 
