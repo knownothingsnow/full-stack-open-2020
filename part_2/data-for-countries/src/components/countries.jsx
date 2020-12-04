@@ -1,30 +1,39 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 function Countries({ filteredCountries }) {
+  const [areaOfShownCountry, setAreaOfShownCountry] = useState(0)
+
+  const showCountries = area => {
+    setAreaOfShownCountry(area)
+  }
+
+  useEffect(() => {
+    if (areaOfShownCountry !== 0) document.querySelector(`#_${areaOfShownCountry}`).style.display = 'block'
+  }, [areaOfShownCountry])
+
   if (filteredCountries.length < 10 && filteredCountries.length > 1) {
     return (
-      <>
-        {
-          filteredCountries.map((country) => <div key={country.numericCode}>{country.name}</div>)
+      <div>
+        {filteredCountries.map(country => (
+          <div key={country.area}>
+            <h4>
+              {country.name}&nbsp;&nbsp;
+              <button onClick={() => showCountries(country.area)}>show</button>
+            </h4>
+            {/* CSS3 doesn't support ID selectors that start with a digit */}
+            {/* https://stackoverflow.com/questions/37270787/uncaught-syntaxerror-failed-to-execute-queryselector-on-document */}
+            <div id={`_${country.area}`} style={{ display: 'none' }}>
+              <div>capital: {country.capital}</div>
+              <div>population: {country.population}</div>
+              <h5>languages</h5>
+              <ul>
+                {country.languages.map(language => <li key={language.iso639_2}>{language.name}</li>)}
+              </ul>
+            </div>
+          </div>
+        ))
         }
-      </>
-    )
-  }
- 
-  if (filteredCountries.length === 1) {
-    const country = filteredCountries[0]
-    return (
-      <>
-        <h3>capital: {country.name}</h3>
-        <div>capital: {country.capital}</div>
-        <div>population: {country.population}</div>
-        <div>
-          <h3>languages</h3>
-          <ul>
-            {country.languages.map(language => <li key={language.iso639_2}>{language.name}</li>)}
-          </ul>
-        </div>
-      </>
+      </div >
     )
   }
 
