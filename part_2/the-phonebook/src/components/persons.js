@@ -10,8 +10,8 @@ const persons = ({
         personsToShow.map((person) => {
           return (
             <div key={person.name}>
-              {person.name}
-              {person.number}
+              {person.name}&nbsp;&nbsp;
+              {person.number}&nbsp;&nbsp;
               <button onClick={() => deletePerson(person.id)}>delete</button>
             </div>
           )

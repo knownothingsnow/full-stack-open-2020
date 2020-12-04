@@ -25,6 +25,12 @@ const App = () => {
       })
   }, [])
 
+  const clear = () => {
+    setNewName('')
+    setNewNumber('')
+    setSearcher('')
+  }
+
   const nameHandler = (e) => {
     setNewName(e.target.value)
   }
@@ -46,18 +52,26 @@ const App = () => {
 
   const submitName = (e) => {
     e.preventDefault()
+    const newGuy = {
+      name: newName,
+      number: newNumber
+    }
     // prevent duplicate person name
     for (const person of persons.values()) {
       if (person.name === newName) {
-        window.alert(`${newName} is already added to phonebook`)
+        if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+          phoneServices.updateContacts(person.id, newGuy)
+            .then(data => {
+              setPersons(persons.map(p => p.id !== person.id ? p : data))
+              setPersonsToShow(personsToShow.map(p => p.id !== person.id ? p : data))
+              clear()
+            })
+        }
         return
       }
     }
 
-    phoneServices.createContacts({
-      name: newName,
-      number: newNumber
-    })
+    phoneServices.createContacts(newGuy)
       .then(data => {
         const newPersons = [
           ...persons,
@@ -66,7 +80,7 @@ const App = () => {
         setPersons(newPersons)
         // reset searcher after add new person
         setPersonsToShow(newPersons)
-        setSearcher('')
+        clear()
       })
   }
 
