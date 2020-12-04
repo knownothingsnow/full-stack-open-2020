@@ -4,7 +4,7 @@ import PersonForm from './components/personForm'
 import Persons from './components/persons'
 import './App.css'
 
-import axios from 'axios'
+import phoneServices from './services/phoneServices'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -18,10 +18,10 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
 
   useEffect(() => {
-    axios.get('http://localhost:3001/persons')
-      .then(res => {
-        setPersons(res.data)
-        setPersonsToShow(res.data)
+    phoneServices.getAllContacts()
+      .then(data => {
+        setPersons(data)
+        setPersonsToShow(data)
       })
   }, [])
 
@@ -43,14 +43,14 @@ const App = () => {
       }
     }
 
-    axios.post('http://localhost:3001/persons', {
+    phoneServices.createContacts({
       name: newName,
       number: newNumber
     })
-      .then(res => {
+      .then(data => {
         const newPersons = [
           ...persons,
-          res.data
+          data
         ]
         setPersons(newPersons)
         // reset searcher after add new person
