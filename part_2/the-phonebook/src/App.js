@@ -33,6 +33,17 @@ const App = () => {
     setNewNumber(e.target.value)
   }
 
+  const deletePerson = id => {
+    if (window.confirm(`Delete ${persons.filter(person => person.id === id)[0].name}`)) {
+      phoneServices.deleteContacts(id)
+        .then(res => {
+          const newPersons = persons.filter(person => person.id !== id)
+          setPersons(newPersons)
+          setPersonsToShow(newPersons)
+        })
+    }
+  }
+
   const submitName = (e) => {
     e.preventDefault()
     // prevent duplicate person name
@@ -80,6 +91,7 @@ const App = () => {
       <h2>Numbers</h2>
       <Persons
         personsToShow={personsToShow}
+        deletePerson={deletePerson}
       />
     </div>
   )
