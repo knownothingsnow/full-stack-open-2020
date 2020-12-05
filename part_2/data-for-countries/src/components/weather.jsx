@@ -4,6 +4,7 @@ import axios from 'axios'
 function Weather ({ country }) {
   const [currentWeather, setCurrentWeather] = useState({})
   useEffect(() => {
+    let isMounted = true
     axios.get('http://api.weatherstack.com/current', {
       params: {
         access_key: process.env.REACT_APP_API_KEY,
@@ -11,8 +12,10 @@ function Weather ({ country }) {
       }
     })
       .then(res => {
-        setCurrentWeather(res.data.current)
+        if (isMounted) setCurrentWeather(res.data.current)
       })
+    // the cleanup callback will be called as soon as the component is unmounted
+    return () => { isMounted = false }
   }, [])
 
   return (
