@@ -56,7 +56,7 @@ const App = () => {
       name: newName,
       number: newNumber
     }
-    // prevent duplicate person name
+    // update duplicate person name
     for (const person of persons.values()) {
       if (person.name === newName) {
         if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
