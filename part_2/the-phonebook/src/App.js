@@ -17,6 +17,8 @@ const App = () => {
 
   const [newNumber, setNewNumber] = useState('')
 
+  const [successMessage, setSuccessMessage] = useState('')
+
   useEffect(() => {
     phoneServices.getAllContacts()
       .then(data => {
@@ -62,6 +64,10 @@ const App = () => {
         if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
           phoneServices.updateContacts(person.id, newGuy)
             .then(data => {
+              setSuccessMessage(`Updated ${newGuy.name}`)
+              setTimeout(function clearNotification () {
+                setSuccessMessage('')
+              }, 3000)
               setPersons(persons.map(p => p.id !== person.id ? p : data))
               setPersonsToShow(personsToShow.map(p => p.id !== person.id ? p : data))
               clear()
@@ -77,6 +83,10 @@ const App = () => {
           ...persons,
           data
         ]
+        setSuccessMessage(`Added ${newGuy.name}`)
+        setTimeout(function clearNotification () {
+          setSuccessMessage('')
+        }, 3000)
         setPersons(newPersons)
         // reset searcher after add new person
         setPersonsToShow(newPersons)
@@ -100,6 +110,7 @@ const App = () => {
         nameHandler={nameHandler}
         newNumber={newNumber}
         numberHandler={numberHandler}
+        successMessage={successMessage}
       />
 
       <h2>Numbers</h2>
