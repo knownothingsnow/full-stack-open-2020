@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Countries from './components/countries'
-import './App.css';
+import './App.css'
 
-function App() {
+function App () {
   const [countryName, setCountryName] = useState('')
   const [countries, setCountries] = useState([])
   const [filteredCountries, setFilteredCountries] = useState([])
 
-  
   const nameHandler = (e) => {
     const name = e.target.value
     setCountryName(name)
@@ -16,16 +15,16 @@ function App() {
   }
 
   useEffect(() => {
-    let api = `https://restcountries.eu/rest/v2/all`
+    const api = 'https://restcountries.eu/rest/v2/all'
     axios.get(api).then(res => { setCountries(res.data) })
   }, [])
-  
+
   return (
     <div>
       <form>
-        <div>filter countries <input type="text" id="search" value={countryName} onChange={nameHandler} /></div>
+        <div>filter countries <input type='text' id='search' value={countryName} onChange={nameHandler} /></div>
       </form>
-      <Countries filteredCountries={filteredCountries}></Countries>
+      <Countries filteredCountries={filteredCountries} />
     </div>
   )
 }
