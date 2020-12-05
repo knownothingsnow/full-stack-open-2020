@@ -17,7 +17,9 @@ const App = () => {
 
   const [newNumber, setNewNumber] = useState('')
 
-  const [successMessage, setSuccessMessage] = useState('')
+  const emptyMessage = { type: '', content: '' }
+
+  const [message, setMessage] = useState(emptyMessage)
 
   useEffect(() => {
     phoneServices.getAllContacts()
@@ -41,13 +43,24 @@ const App = () => {
     setNewNumber(e.target.value)
   }
 
+  const clearMessageAfter = (second) => setTimeout(() => { setMessage(emptyMessage) }, second * 1000)
+
   const deletePerson = id => {
-    if (window.confirm(`Delete ${persons.filter(person => person.id === id)[0].name}`)) {
+    const name = persons.filter(person => person.id === id)[0].name
+    if (window.confirm(`Delete ${name}`)) {
       phoneServices.deleteContacts(id)
         .then(res => {
           const newPersons = persons.filter(person => person.id !== id)
           setPersons(newPersons)
           setPersonsToShow(newPersons)
+        })
+        .catch(err => {
+          console.log(err)
+          setMessage({
+            type: 'error',
+            content: `Information of ${name} has already been removed from server`
+          })
+          clearMessageAfter(3)
         })
     }
   }
@@ -64,13 +77,21 @@ const App = () => {
         if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
           phoneServices.updateContacts(person.id, newGuy)
             .then(data => {
-              setSuccessMessage(`Updated ${newGuy.name}`)
-              setTimeout(function clearNotification () {
-                setSuccessMessage('')
-              }, 3000)
+              setMessage({
+                type: 'success',
+                content: `Updated ${newGuy.name}`
+              })
+              clearMessageAfter(3)
               setPersons(persons.map(p => p.id !== person.id ? p : data))
               setPersonsToShow(personsToShow.map(p => p.id !== person.id ? p : data))
               clear()
+            })
+            .catch(err => {
+              console.log(err)
+              setMessage({
+                type: 'error',
+                content: `Information of ${newGuy.name} has already been removed from server`
+              })
             })
         }
         return
@@ -83,10 +104,11 @@ const App = () => {
           ...persons,
           data
         ]
-        setSuccessMessage(`Added ${newGuy.name}`)
-        setTimeout(function clearNotification () {
-          setSuccessMessage('')
-        }, 3000)
+        setMessage({
+          type: 'success',
+          content: `Added ${newGuy.name}`
+        })
+        clearMessageAfter(3)
         setPersons(newPersons)
         // reset searcher after add new person
         setPersonsToShow(newPersons)
@@ -110,7 +132,7 @@ const App = () => {
         nameHandler={nameHandler}
         newNumber={newNumber}
         numberHandler={numberHandler}
-        successMessage={successMessage}
+        message={message}
       />
 
       <h2>Numbers</h2>

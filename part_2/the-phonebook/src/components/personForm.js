@@ -6,11 +6,11 @@ const personForm = ({
   nameHandler,
   newNumber,
   numberHandler,
-  successMessage
+  message
 }) => {
   return (
     <>
-      <Notification successMessage={successMessage} />
+      <Notification message={message} />
       <form onSubmit={submitName}>
         <div>name: <input value={newName} onChange={nameHandler} /></div>
         <div>number: <input value={newNumber} onChange={numberHandler} /></div>
