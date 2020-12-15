@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+app.use(express.json())
 
 let persons = [
   {
@@ -46,6 +47,26 @@ app.delete('/api/persons/:id', (req, res) => {
   const id = Number(req.params.id)
   persons = persons.filter((note) => note.id !== id)
   res.status(204).end()
+})
+
+function getRandomInt (min, max) {
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  return Math.floor(Math.random() * (max - min) + min)
+}
+
+let maxId
+
+app.post('/api/persons', (req, res) => {
+  if (!maxId) {
+    maxId = Math.max(...persons.map((p) => p.id))
+  }
+  const person = req.body
+  const newPerson = {
+    id: getRandomInt(maxId, Number.MAX_SAFE_INTEGER),
+    ...person
+  }
+  res.json(persons.concat(newPerson))
 })
 
 app.get('/info', (req, res) => {
