@@ -66,7 +66,11 @@ app.post('/api/persons', (req, res) => {
     id: getRandomInt(maxId, Number.MAX_SAFE_INTEGER),
     ...person
   }
-  res.json(persons.concat(newPerson))
+  persons = persons.concat({
+    id: getRandomInt(maxId, Number.MAX_SAFE_INTEGER),
+    ...newPerson
+  })
+  res.json(persons)
 })
 
 app.get('/info', (req, res) => {
