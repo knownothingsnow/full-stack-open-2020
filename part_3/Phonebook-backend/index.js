@@ -64,10 +64,18 @@ app.post('/api/persons', (req, res) => {
   if (!maxId) maxId = Math.max(...persons.map((p) => p.id))
 
   const newPerson = req.body
-  if (!newPerson.name) res.status(403).send({ error: 'name is required' }).end()
-  if (!newPerson.number) res.status(403).send({ error: 'number is required' }).end()
-  if (persons.find(p => p.name === newPerson.name)) res.status(403).send({ error: 'name must be unique' }).end()
-
+  if (!newPerson.name) {
+    res.status(403).send({ error: 'name is required' })
+    return
+  }
+  if (!newPerson.number) {
+    res.status(403).send({ error: 'number is required' })
+    return
+  }
+  if (persons.find(p => p.name === newPerson.name)) {
+    res.status(403).send({ error: 'name must be unique' })
+    return
+  }
   persons = persons.concat({
     id: getRandomInt(maxId, Number.MAX_SAFE_INTEGER),
     ...newPerson
