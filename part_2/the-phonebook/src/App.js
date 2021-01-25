@@ -27,6 +27,12 @@ const App = () => {
         setPersons(data)
         setPersonsToShow(data)
       })
+      .catch(err => {
+        setMessage({
+          type: 'error',
+          content: err.response.data.error
+        })
+      })
   }, [])
 
   const clear = () => {
@@ -55,10 +61,9 @@ const App = () => {
           setPersonsToShow(newPersons)
         })
         .catch(err => {
-          console.log(err)
           setMessage({
             type: 'error',
-            content: `Information of ${name} has already been removed from server`
+            content: err.response.data.error
           })
           clearMessageAfter(3)
         })
@@ -87,10 +92,9 @@ const App = () => {
               clear()
             })
             .catch(err => {
-              console.log(err)
               setMessage({
                 type: 'error',
-                content: `Information of ${newGuy.name} has already been removed from server`
+                content: err.response.data.error
               })
             })
         }
@@ -113,6 +117,12 @@ const App = () => {
         // reset searcher after add new person
         setPersonsToShow(newPersons)
         clear()
+      })
+      .catch(err => {
+        setMessage({
+          type: 'error',
+          content: err.response.data.error
+        })
       })
   }
 
