@@ -39,9 +39,28 @@ function mostBlogs(list) {
   }
 }
 
+function mostLikes(list) {
+  const result = _.groupBy(list, 'author')
+  for (let key in result) {
+    result[key] = totalLikes(result[key])
+  }
+  let max = 0, name
+  _.forEach(result, function (value, key) {
+    if (max < value) {
+      max = value
+      name = key
+    }
+  })
+  return {
+    author: name,
+    likes: max
+  }
+}
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }
