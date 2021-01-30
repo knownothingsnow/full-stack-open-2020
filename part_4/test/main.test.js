@@ -30,3 +30,9 @@ describe('most like', () => {
   })
 })
 
+describe('author with the most blogs', () => {
+  test('author with the most blogs', () => {
+    expect(listHelper.mostBlogs(blogs)).toEqual({ author: "Robert C. Martin", blogs: 3 })
+  })
+})
+
