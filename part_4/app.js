@@ -4,8 +4,6 @@ const morgan = require('morgan')
 const cors = require('cors')
 
 const router = require('./controllers/blog')
-const logger = require('./utils/logger')
-const config = require('./utils/config')
 const middleware = require('./utils/middleware')
 
 app.use(cors())

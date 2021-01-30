@@ -1,19 +1,20 @@
 const _ = require('lodash')
-function dummy(blogs) {
+function dummy (blogs) {
   // console.log(blogs);
   return 1
 }
 
-function totalLikes(list) {
+function totalLikes (list) {
   return list.reduce((sum, curr) => {
-    return sum += curr.likes
+    sum += curr.likes
+    return sum
   }, 0)
 }
 
-function favoriteBlog(list) {
+function favoriteBlog (list) {
   let max = 0
   let favoriteBlog = null
-  for (let item of list) {
+  for (const item of list) {
     // console.log(item.likes);
     if (item.likes >= max) {
       max = item.likes
@@ -23,7 +24,7 @@ function favoriteBlog(list) {
   return favoriteBlog
 }
 
-function mostBlogs(list) {
+function mostBlogs (list) {
   const result = _.groupBy(list, 'author')
   let max = 0
   let author
@@ -39,12 +40,14 @@ function mostBlogs(list) {
   }
 }
 
-function mostLikes(list) {
+function mostLikes (list) {
   const result = _.groupBy(list, 'author')
-  for (let key in result) {
+  for (const key in result) {
     result[key] = totalLikes(result[key])
   }
-  let max = 0, name
+  let max = 0
+
+  let name
   _.forEach(result, function (value, key) {
     if (max < value) {
       max = value
