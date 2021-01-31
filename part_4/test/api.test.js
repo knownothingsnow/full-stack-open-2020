@@ -59,6 +59,17 @@ test('empty like will set to default 0', async () => {
   ).toEqual(0)
 })
 
+test('missing url or title will get code 400', async () => {
+  const newBlog = {
+    author: 'xx',
+    likes: 222
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })

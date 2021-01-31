@@ -6,7 +6,10 @@ blogRouter.get('/blogs', async (request, response) => {
   response.json(blogs)
 })
 
-blogRouter.post('/blogs', async (request, response) => {
+blogRouter.post('/blogs', async (request, response, next) => {
+  if (request.title === undefined || request.url === undefined) {
+    return response.status(400).send()
+  }
   const blog = new Blog({
     likes: request.body.likes || 0,
     ...request.body
