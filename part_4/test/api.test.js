@@ -23,6 +23,22 @@ test('blogs have id defined', async () => {
   }
 })
 
+test('add a blogs', async () => {
+  const newBlog = {
+    title: 'asdasdasd',
+    author: 'xx',
+    url: 'so.com',
+    likes: 999
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect('Content-Type', /json/)
+    .expect(201)
+  const afterAdd = await helper.blogsInDb()
+  expect(afterAdd).toHaveLength(helper.testSet.length + 1)
+  expect(afterAdd.map(i => i.title)).toContain(newBlog.title)
+})
 afterAll(() => {
   mongoose.connection.close()
 })
