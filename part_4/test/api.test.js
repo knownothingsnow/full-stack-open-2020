@@ -39,6 +39,26 @@ test('add a blogs', async () => {
   expect(afterAdd).toHaveLength(helper.testSet.length + 1)
   expect(afterAdd.map(i => i.title)).toContain(newBlog.title)
 })
+
+test('empty like will set to default 0', async () => {
+  const newBlog = {
+    title: 'aaa',
+    author: 'xx',
+    url: 'so.com'
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect('Content-Type', /json/)
+    .expect(201)
+  const afterAdd = await helper.blogsInDb()
+  expect(
+    afterAdd
+      .filter(i => i.title === newBlog.title)[0]
+      .likes
+  ).toEqual(0)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
