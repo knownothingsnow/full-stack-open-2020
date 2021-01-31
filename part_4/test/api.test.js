@@ -16,6 +16,13 @@ test('blogs number is right', async () => {
   expect(res.body).toHaveLength(helper.testSet.length)
 })
 
+test('blogs have id defined', async () => {
+  const res = await api.get('/api/blogs')
+  for (const i of res.body) {
+    expect(i.id).toBeDefined()
+  }
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
