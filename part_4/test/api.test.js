@@ -80,6 +80,19 @@ test('delete a blog', async () => {
   expect(blogsAfter.map(i => i.url)).not.toContain(blogToDelete.url)
 })
 
+test('update a blog', async () => {
+  const blogsBefore = await helper.blogsInDb()
+  const blogToUpdate = {
+    ...blogsBefore[0],
+    likes: 123
+  }
+  await api.put(`/api/blogs/${blogToUpdate.id}`)
+    .send(blogToUpdate)
+    .expect(200)
+  const blogsAfter = await Blog.findById(blogToUpdate.id)
+  expect(blogsAfter.likes).toEqual(123)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
