@@ -2,22 +2,27 @@ const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
 const User = require('../models/user')
 
-usersRouter.get('/', async (request, response) => {
+usersRouter.get('/', async (req, res) => {
   const blogs = await User.find({})
-  response.json(blogs)
+  res.json(blogs)
 })
 
-usersRouter.post('/', async (request, response, next) => {
-  const body = request.body
-
+usersRouter.post('/', async (req, res, next) => {
+  const name = req.body.name
+  const username = req.body.username
+  const password = req.body.password
+  if (!password || password.length < 3) {
+    return res.status(403).json({ message: 'password is invalid' })
+  }
   const saltRounds = 10
-  const passwordHash = await bcrypt.hash(body.password, saltRounds)
+  const passwordHash = await bcrypt.hash(password, saltRounds)
   const user = new User({
-    ...body,
+    name,
+    username,
     passwordHash
   })
   const savedUser = await user.save()
-  response.json(savedUser)
+  res.json(savedUser)
 })
 
 // usersRouter.delete('/:id', async function (req, res, next) {

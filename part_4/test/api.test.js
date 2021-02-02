@@ -137,4 +137,58 @@ describe('when there is initially one user in db', () => {
     const usernames = usersAtEnd.map(u => u.username)
     expect(usernames).toContain(newUser.username)
   })
+
+  test('add an invalid user', async () => {
+    const usersAtStart = await helper.usersInDb()
+    await api
+      .post('/api/users')
+      .send({
+        name: 'Bruce Lee',
+        password: 'aaaaagh-da!'
+      })
+      .expect(403)
+      .expect('Content-Type', /application\/json/)
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+
+    // const usersAtStart = await helper.usersInDb()
+    // const check = async (user, api) => {
+    //   await api
+    //     .post('/api/users')
+    //     .send(user)
+    //     .expect(403)
+    //     .expect('Content-Type', /application\/json/)
+    //   const usersAtEnd = await helper.usersInDb()
+    //   expect(usersAtEnd).toHaveLength(usersAtStart.length)
+    // }
+    // const userA = {
+    //   name: 'Bruce Lee',
+    //   password: 'aaaaagh-da!'
+    // }
+    // check(userA, api)
+    // const userB = {
+    //   username: 'lixiaolong',
+    //   name: 'Bruce Lee'
+    //   // password: 'aaaaagh-da!'
+    // }
+    // check(userB, api)
+    // const userC = {
+    //   username: 'li',
+    //   name: 'Bruce Lee',
+    //   password: 'aaaaagh-da!'
+    // }
+    // check(userC, api)
+    // const userD = {
+    //   username: 'li',
+    //   name: 'Bruce Lee',
+    //   password: 'a'
+    // }
+    // check(userD, api)
+    // const userE = {
+    //   username: 'root',
+    //   name: 'Bruce Lee',
+    //   password: 'a'
+    // }
+    // check(userE, api)
+  })
 })
