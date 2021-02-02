@@ -21,7 +21,7 @@ mongoose
     useCreateIndex: true
   })
   .then(result => {
-    console.info('connected to MongoDB', config.MONGODB_URI)
+    console.info('connected to MongoDB')
   })
   .catch((error) => {
     logger.info('error connecting to MongoDB:', error.message)
