@@ -17,7 +17,6 @@ blogRouter.post('/', async (req, res, next) => {
   if (!req.token || !decodedToken.id) {
     return res.status(401).json({ error: 'token missing or invalid' })
   }
-  console.log('login success')
   const user = await User.findById(decodedToken.id)
   const blog = new Blog({
     ...req.body,
@@ -31,6 +30,14 @@ blogRouter.post('/', async (req, res, next) => {
 })
 
 blogRouter.delete('/:id', async function (req, res, next) {
+  const decodedToken = jwt.verify(req.token, process.env.SECRET)
+  if (!req.token || !decodedToken.id) {
+    return res.status(401).json({ error: 'token missing or invalid' })
+  }
+  const user = await User.findById(decodedToken.id)
+  if (!user.blogs.includes(req.params.id)) {
+    return res.status(401).json({ error: 'you don\'t have permission to delete' })
+  }
   await Blog.findByIdAndRemove(req.params.id)
   res.status(204).end()
 })
@@ -43,7 +50,6 @@ blogRouter.put('/:id', async function (req, res, next) {
   if (!req.token || !decodedToken.id) {
     return res.status(401).json({ error: 'token missing or invalid' })
   }
-  console.log('login success')
   const user = await User.findById(decodedToken.id)
   const blog = new Blog({
     ...req.body,
