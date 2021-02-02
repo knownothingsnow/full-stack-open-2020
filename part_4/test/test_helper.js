@@ -1,4 +1,4 @@
-const Blog = require('../models/mongo')
+const Blog = require('../models/blogs')
 
 const testSet = [
   {
