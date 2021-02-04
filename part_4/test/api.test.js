@@ -1,5 +1,8 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const _ = require('lodash')
+
 const supertest = require('supertest')
 const api = supertest(require('../app'))
 
@@ -7,12 +10,10 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 
 const helper = require('./test_helper')
-
-describe('when there is initially some blogs saved', () => {
+/* eslint-disable comma-dangle */
+/* describe('when there is initially some blogs saved', () => {
   beforeEach(async () => {
-    await Blog.deleteMany({})
-    const models = helper.testSet.map((item) => new Blog(item))
-    await Promise.all(models.map((item) => item.save()))
+
   })
 
   test('blogs number is right', async () => {
@@ -28,6 +29,7 @@ describe('when there is initially some blogs saved', () => {
   })
 
   test('add a blogs', async () => {
+    const token = await api.get('/api/login').token
     const newBlog = {
       title: 'asdasdasd',
       author: 'xx',
@@ -36,6 +38,7 @@ describe('when there is initially some blogs saved', () => {
     }
     await api
       .post('/api/blogs')
+      .set('authorization', `bearer ${token}`)
       .send(newBlog)
       .expect('Content-Type', /json/)
       .expect(201)
@@ -100,20 +103,36 @@ describe('when there is initially some blogs saved', () => {
   afterAll(() => {
     mongoose.connection.close()
   })
-})
+}) */
 
-describe('when there is initially one user in db', () => {
-  beforeEach(async () => {
+describe('get everything prepared initially', () => {
+  let token
+  beforeAll(async () => {
     await User.deleteMany({})
-    const passwordHash = await bcrypt.hash('sekret', 10)
-    const user = new User({ username: 'root', passwordHash })
-    await user.save()
-  })
+    await Blog.deleteMany({})
 
-  test('get all users', async () => {
-    const res = await api.get('/api/users')
-    expect(res.body).toHaveLength(1)
-    expect(res.body[0].username).toEqual('root')
+    const passwordHash = await bcrypt.hash('sekret', 10)
+    const initialRootUser = {
+      username: 'root',
+      passwordHash
+    }
+    const user = new User(initialRootUser)
+    const rootUser = await user.save()
+
+    token = jwt.sign({
+      id: rootUser._id,
+      username: rootUser.username
+    }, process.env.SECRET)
+    // console.log(rootUser, token)
+    const models = helper.testSet.map((item) => new Blog({ ...item, user: rootUser.id }))
+    const blogs = await Promise.all(models.map((item) => item.save()))
+
+    user.blogs = blogs.map(i => i.id)
+    await user.save()
+  }, 10 * 1000)
+
+  afterAll(() => {
+    mongoose.connection.close()
   })
 
   test('creation succeeds with a fresh username', async () => {
@@ -138,57 +157,51 @@ describe('when there is initially one user in db', () => {
     expect(usernames).toContain(newUser.username)
   })
 
-  test('add an invalid user', async () => {
+  test('get all users', async () => {
+    await helper.usersInDb()
+    const res = await api.get('/api/users')
+    expect(res.body).toHaveLength(2)
+    expect(res.body[0].username).toEqual('root')
+  })
+
+  test.each([
+    {
+      title: 'without username',
+      name: 'Bruce Lee',
+      password: 'aaaaagh-da!',
+    },
+    {
+      title: 'without password',
+      username: 'lixiaolong',
+      name: 'Bruce Lee'
+    },
+    {
+      title: 'with short username',
+      username: 'li',
+      name: 'Bruce Lee',
+      password: 'aaaaagh-da!'
+    },
+    {
+      title: 'with short password',
+      username: 'lixiaolong',
+      name: 'Bruce Lee',
+      password: 'a'
+    },
+    {
+      title: 'with duplicate username',
+      username: 'root',
+      name: 'Bruce Lee',
+      password: 'aaaaagh-da!'
+    }
+  ])('add an invalid user', async (user) => {
     const usersAtStart = await helper.usersInDb()
+    // console.log(`test ${user.title}`)
     await api
       .post('/api/users')
-      .send({
-        name: 'Bruce Lee',
-        password: 'aaaaagh-da!'
-      })
+      .send(_.pick(user, ['username', 'name', 'password']))
       .expect(403)
       .expect('Content-Type', /application\/json/)
     const usersAtEnd = await helper.usersInDb()
     expect(usersAtEnd).toHaveLength(usersAtStart.length)
-
-    // const usersAtStart = await helper.usersInDb()
-    // const check = async (user, api) => {
-    //   await api
-    //     .post('/api/users')
-    //     .send(user)
-    //     .expect(403)
-    //     .expect('Content-Type', /application\/json/)
-    //   const usersAtEnd = await helper.usersInDb()
-    //   expect(usersAtEnd).toHaveLength(usersAtStart.length)
-    // }
-    // const userA = {
-    //   name: 'Bruce Lee',
-    //   password: 'aaaaagh-da!'
-    // }
-    // check(userA, api)
-    // const userB = {
-    //   username: 'lixiaolong',
-    //   name: 'Bruce Lee'
-    //   // password: 'aaaaagh-da!'
-    // }
-    // check(userB, api)
-    // const userC = {
-    //   username: 'li',
-    //   name: 'Bruce Lee',
-    //   password: 'aaaaagh-da!'
-    // }
-    // check(userC, api)
-    // const userD = {
-    //   username: 'li',
-    //   name: 'Bruce Lee',
-    //   password: 'a'
-    // }
-    // check(userD, api)
-    // const userE = {
-    //   username: 'root',
-    //   name: 'Bruce Lee',
-    //   password: 'a'
-    // }
-    // check(userE, api)
-  })
+  }, 10 * 1000)
 })
