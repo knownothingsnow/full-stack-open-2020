@@ -6,11 +6,12 @@ module.exports = {
     jest: true
   },
   extends: [
-    'standard'
+    'standard',
+    'standard-jsx',
+    'standard-react'
   ],
   parserOptions: {
     ecmaVersion: 12
   },
-  rules: {
-  }
+  parser: 'babel-eslint'
 }
