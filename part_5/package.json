@@ -22,7 +22,7 @@
     "eslint-plugin-react": "^7.22.0"
   },
   "scripts": {
-    "start": "BROWSER='google chrome beta' react-scripts start",
+    "start": "BROWSER='microsoft edge dev' react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
