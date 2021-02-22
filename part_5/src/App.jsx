@@ -3,6 +3,7 @@ import './App.css'
 import Blog from './components/Blog'
 import CreateForm from './components/CreateForm'
 import LoginForm from './components/LoginForm'
+import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -13,9 +14,6 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   // createForm
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
 
   const emptyMessage = { type: '', content: '' }
   const [message, setMessage] = useState(emptyMessage)
@@ -52,7 +50,7 @@ const App = () => {
       const result = await loginService.login({ username, password })
       localStorage.setItem('user', JSON.stringify(result))
       setUser(result)
-      showMessage({ type: 'success', content: `blog added successfully by ${result?.name}` }, 3)
+      showMessage({ type: 'success', content: `welcome, ${result?.name}` }, 3)
       clearLoginForm()
     } catch (error) {
       console.error(error)
@@ -66,16 +64,7 @@ const App = () => {
     localStorage.setItem('user', '')
   }
 
-  const usernameHandler = (e) => { setUsername(e.target.value) }
-  const passwordHandler = (e) => { setPassword(e.target.value) }
-
-  const titleHandler = e => { setTitle(e.target.value) }
-  const authorHandler = e => { setAuthor(e.target.value) }
-  const urlHandler = e => { setUrl(e.target.value) }
-
-  const createBlog = async (e) => {
-    e.preventDefault()
-    const newBlog = { title, author, url }
+  const createBlog = async (newBlog) => {
     try {
       const res = await blogService.create(newBlog)
       setBlogs(blogs.concat(res))
@@ -93,29 +82,21 @@ const App = () => {
         loginHandler={login}
         username={username}
         password={password}
-        usernameHandler={usernameHandler}
-        passwordHandler={passwordHandler}
+        usernameHandler={(e) => { setUsername(e.target.value) }}
+        passwordHandler={(e) => { setPassword(e.target.value) }}
       />
     </Togglable>
   )
 
   const blogForm = () => (
     <Togglable buttonLabel='new blog'>
-      <CreateForm
-        title={title}
-        author={author}
-        url={url}
-        titleHandler={titleHandler}
-        authorHandler={authorHandler}
-        urlHandler={urlHandler}
-        submitHandler={createBlog}
-        message={message}
-      />
+      <CreateForm createBlog={createBlog} />
     </Togglable>
   )
   return (
     /* eslint-disable react/jsx-closing-tag-location */
     <div>
+      <Notification message={message} />
       <h3>Blogs</h3>
       {!user
         ? loginForm()

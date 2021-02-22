@@ -1,9 +1,6 @@
-
 import React from 'react'
-import Notification from './Notification'
 /* eslint-disable react/prop-types */
 const LoginForm = ({
-  message,
   loginHandler,
   username,
   password,
@@ -12,7 +9,6 @@ const LoginForm = ({
 }) => (
   <div>
     <h2>login required</h2>
-    <Notification message={message} />
     <form onSubmit={loginHandler}>
       <label>username:
         <input type='text' name='username' value={username} onChange={usernameHandler} />
