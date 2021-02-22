@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './App.css'
 import Blog from './components/Blog'
 import CreateForm from './components/CreateForm'
-import Notification from './components/notification'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 const App = () => {
