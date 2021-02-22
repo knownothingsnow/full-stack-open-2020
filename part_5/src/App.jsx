@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import './App.css'
 import Blog from './components/Blog'
 import CreateForm from './components/CreateForm'
-import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
@@ -84,25 +86,21 @@ const App = () => {
     }
   }
 
-  if (!user) {
-    return (
-      <div>
-        <h2>login required</h2>
-        <Notification message={message} />
-        <form onSubmit={login}>
-          <label>username:
-            <input type='text' name='username' value={username} onChange={usernameHandler} />
-          </label>
-          <label>password:
-            <input type='password' name='password' value={password} onChange={passwordHandler} />
-          </label>
-          <button type='submit'>login</button>
-        </form>
-      </div>
-    )
-  }
-  return (
-    <div>
+  const loginForm = () => (
+    <Togglable buttonLabel='login here'>
+      <LoginForm
+        message={message}
+        loginHandler={login}
+        username={username}
+        password={password}
+        usernameHandler={usernameHandler}
+        passwordHandler={passwordHandler}
+      />
+    </Togglable>
+  )
+
+  const blogForm = () => (
+    <Togglable buttonLabel='new blog'>
       <CreateForm
         title={title}
         author={author}
@@ -113,10 +111,21 @@ const App = () => {
         submitHandler={createBlog}
         message={message}
       />
+    </Togglable>
+  )
+  return (
+    /* eslint-disable react/jsx-closing-tag-location */
+    <div>
       <h3>Blogs</h3>
-      <div>{user.username} logged in
-        <button onClick={logout}>logout!</button>
-      </div>
+      {!user
+        ? loginForm()
+        : <div>
+          <div>{user.username} logged in
+            <button onClick={logout}>logout!</button>
+          </div>
+          {blogForm()}
+        </div>}
+
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
