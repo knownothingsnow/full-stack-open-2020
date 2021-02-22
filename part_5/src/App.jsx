@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './App.css'
 import Blog from './components/Blog'
 import CreateForm from './components/CreateForm'
@@ -13,7 +13,8 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  // createForm
+  const toggleBlogFormRef = useRef()
+  const blogFormRef = useRef()
 
   const emptyMessage = { type: '', content: '' }
   const [message, setMessage] = useState(emptyMessage)
@@ -69,6 +70,8 @@ const App = () => {
       const res = await blogService.create(newBlog)
       setBlogs(blogs.concat(res))
       showMessage({ type: 'success', content: `blog added successfully by ${user.name}` }, 3)
+      toggleBlogFormRef.current.toggleVisibility()
+      blogFormRef.current.clear()
     } catch (err) {
       console.log(err)
       showMessage({ type: 'error', content: 'add blog failed' }, 3)
@@ -89,8 +92,8 @@ const App = () => {
   )
 
   const blogForm = () => (
-    <Togglable buttonLabel='new blog'>
-      <CreateForm createBlog={createBlog} />
+    <Togglable buttonLabel='new blog' ref={toggleBlogFormRef}>
+      <CreateForm createBlog={createBlog} ref={blogFormRef} />
     </Togglable>
   )
   return (

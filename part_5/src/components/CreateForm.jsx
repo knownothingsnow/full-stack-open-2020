@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-
-const createFrom = ({ createBlog }) => {
+import React, { useImperativeHandle, useState } from 'react'
+/* eslint-disable react/prop-types */
+const createFrom = React.forwardRef(({ createBlog, children }, ref) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -9,6 +9,14 @@ const createFrom = ({ createBlog }) => {
     e.preventDefault()
     createBlog({ title, author, url })
   }
+  useImperativeHandle(ref, () => ({
+    clear () {
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+    }
+  }))
+
   return (
     <>
       <h3>create new</h3>
@@ -32,5 +40,5 @@ const createFrom = ({ createBlog }) => {
       </form>
     </>
   )
-}
+})
 export default createFrom
