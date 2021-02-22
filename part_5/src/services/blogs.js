@@ -1,9 +1,10 @@
 import axios from 'axios'
+import { reverse, sortBy } from 'lodash'
 const baseUrl = '/api/blogs'
 
-const getAll = () => {
-  const request = axios.get(baseUrl)
-  return request.then(response => response.data)
+const getAll = async () => {
+  const res = await axios.get(baseUrl)
+  return reverse(sortBy(res?.data, ['likes']))
 }
 
 const create = async (blog) => {
