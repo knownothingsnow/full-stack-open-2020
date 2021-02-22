@@ -1,6 +1,6 @@
-/* eslint-disable */
 import React, { useState } from 'react'
-const Blog = ({ blog }) => {
+/* eslint-disable react/prop-types */
+const Blog = ({ blog, likeBlog }) => {
   const [extend, setExtend] = useState(false)
 
   const blogStyle = {
@@ -12,20 +12,22 @@ const Blog = ({ blog }) => {
   }
 
   const toggleExtend = () => { setExtend(!extend) }
-
+  const likeThis = () => {
+    console.log(blog.likes)
+    likeBlog(blog)
+  }
   return (
     <div style={blogStyle}>
       <p>
         {blog.title} {blog.author}
-        <button onClick={toggleExtend}>{extend? 'hide':'view'}</button>
+        <button onClick={toggleExtend}>{extend ? 'hide' : 'view'}</button>
       </p>
       {extend &&
         <>
           <p>{blog.url}</p>
-          <p>Likes:{blog.likes} <button>like</button></p>
+          <p>Likes:{blog.likes} <button onClick={likeThis}>like</button></p>
           <p>{blog.user?.username}</p>
-        </>
-      }
+        </>}
     </div>
   )
 }

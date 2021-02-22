@@ -78,6 +78,20 @@ const App = () => {
     }
   }
 
+  const likeBlog = async (blog) => {
+    try {
+      await blogService.likeThis({
+        ...blog,
+        likes: blog.likes + 1
+      })
+      const newBlogs = await blogService.getAll()
+      setBlogs(newBlogs)
+    } catch (err) {
+      console.error(err)
+      showMessage({ type: 'error', content: `like blog ${blog.title} failed` }, 3)
+    }
+  }
+
   const loginForm = () => (
     <Togglable buttonLabel='login here'>
       <LoginForm
@@ -111,7 +125,11 @@ const App = () => {
         </div>}
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          likeBlog={likeBlog}
+        />
       )}
     </div>
   )
