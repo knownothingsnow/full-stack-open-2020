@@ -92,6 +92,20 @@ const App = () => {
     }
   }
 
+  const removeBlog = async (blog) => {
+    try {
+      if (confirm('do you want delete this blog?')) {
+        await blogService.removeBlog(blog)
+        const newBlogs = await blogService.getAll()
+        setBlogs(newBlogs)
+        showMessage({ type: 'success', content: 'blog delete success!' }, 3)
+      }
+    } catch (err) {
+      console.error(err)
+      showMessage({ type: 'error', content: `delete blog ${blog.title} failed` }, 3)
+    }
+  }
+
   const loginForm = () => (
     <Togglable buttonLabel='login here'>
       <LoginForm
@@ -129,6 +143,7 @@ const App = () => {
           key={blog.id}
           blog={blog}
           likeBlog={likeBlog}
+          removeBlog={removeBlog}
         />
       )}
     </div>

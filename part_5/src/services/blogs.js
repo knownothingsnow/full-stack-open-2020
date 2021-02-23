@@ -33,4 +33,17 @@ const likeThis = async (blog) => {
   }
 }
 
-export default { getAll, create, likeThis }
+const removeBlog = async (blog) => {
+  const token = JSON.parse(localStorage.getItem('user'))?.token
+  if (token) {
+    const config = {
+      headers: { Authorization: `bearer ${token}` }
+    }
+    const res = await axios.delete(`${baseUrl}/${blog.id}`, config)
+    return res?.data
+  } else {
+    throw new Error('token is missing')
+  }
+}
+
+export default { getAll, create, likeThis, removeBlog }

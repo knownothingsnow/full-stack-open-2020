@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 /* eslint-disable react/prop-types */
-const Blog = ({ blog, likeBlog }) => {
+const Blog = ({ blog, likeBlog, removeBlog }) => {
   const [extend, setExtend] = useState(false)
 
   const blogStyle = {
@@ -12,10 +12,7 @@ const Blog = ({ blog, likeBlog }) => {
   }
 
   const toggleExtend = () => { setExtend(!extend) }
-  const likeThis = () => {
-    console.log(blog.likes)
-    likeBlog(blog)
-  }
+
   return (
     <div style={blogStyle}>
       <p>
@@ -25,8 +22,9 @@ const Blog = ({ blog, likeBlog }) => {
       {extend &&
         <>
           <p>{blog.url}</p>
-          <p>Likes:{blog.likes} <button onClick={likeThis}>like</button></p>
+          <p>Likes:{blog.likes} <button onClick={() => { likeBlog(blog) }}>like</button></p>
           <p>{blog.user?.username}</p>
+          <button onClick={() => { removeBlog(blog) }}>remove</button>
         </>}
     </div>
   )
