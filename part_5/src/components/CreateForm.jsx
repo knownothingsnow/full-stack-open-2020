@@ -1,6 +1,7 @@
+import PropTypes from 'prop-types'
 import React, { useImperativeHandle, useState } from 'react'
-/* eslint-disable react/prop-types */
-const createFrom = React.forwardRef(({ createBlog, children }, ref) => {
+
+const createFrom = React.forwardRef(({ createBlog }, ref) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -41,4 +42,8 @@ const createFrom = React.forwardRef(({ createBlog, children }, ref) => {
     </>
   )
 })
+createFrom.displayName = 'createFrom'
+createFrom.propTypes = {
+  createBlog: PropTypes.func.isRequired
+}
 export default createFrom

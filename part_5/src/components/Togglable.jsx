@@ -1,5 +1,6 @@
+import PropTypes from 'prop-types'
 import React, { useImperativeHandle, useState } from 'react'
-/* eslint-disable react/prop-types */
+
 const Togglable = React.forwardRef(({ buttonLabel, children }, ref) => {
   const [visible, setVisible] = useState(false)
 
@@ -24,5 +25,8 @@ const Togglable = React.forwardRef(({ buttonLabel, children }, ref) => {
     </div>
   )
 })
-
+Togglable.displayName = 'Togglable'
+Togglable.propTypes = {
+  buttonLabel: PropTypes.string.isRequired,
+}
 export default Togglable
