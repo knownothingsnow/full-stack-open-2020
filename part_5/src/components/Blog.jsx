@@ -16,13 +16,14 @@ const Blog = ({ blog, likeBlog, removeBlog }) => {
   return (
     <div style={blogStyle}>
       <p>
-        {blog.title} {blog.author}
+        <span className="blog-title">{blog.title}</span>
+        <span className="blog-author">{blog.author}</span>
         <button onClick={toggleExtend}>{extend ? 'hide' : 'view'}</button>
       </p>
       {extend &&
         <>
-          <p>{blog.url}</p>
-          <p>Likes:{blog.likes} <button onClick={() => { likeBlog(blog) }}>like</button></p>
+          <p className="blog-url">{blog.url}</p>
+          <p className="blog-likes">Likes:{blog.likes} <button onClick={() => { likeBlog(blog) }}>like</button></p>
           <p>{blog.user?.username}</p>
           <button onClick={() => { removeBlog(blog) }}>remove</button>
         </>}
