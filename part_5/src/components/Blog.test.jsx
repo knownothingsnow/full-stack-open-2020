@@ -12,11 +12,10 @@ describe('test for blog component', () => {
     id: '601ea1a16ed7f4f49c5d6668'
   }
 
-  const component = render(
-    <Blog blog={blog} likeBlog={() => {}} removeBlog={() => {}}/>
-  )
-
   test('test right render', () => {
+    const component = render(
+      <Blog blog={blog} likeBlog={() => {}} removeBlog={() => {}}/>
+    )
     expect(component.container.querySelector('.blog-title')).toHaveTextContent('test-title')
     expect(component.container.querySelector('.blog-author')).toHaveTextContent('test-author')
     expect(component.container.querySelector('.blog-url')).toBeNull()
@@ -24,19 +23,22 @@ describe('test for blog component', () => {
   })
 
   test('show url and likes', () => {
-    const blog = {
-      title: 'test-title',
-      author: 'test-author',
-      url: 'test-url',
-      likes: 233,
-      id: '601ea1a16ed7f4f49c5d6668'
-    }
-
     const component = render(
       <Blog blog={blog} likeBlog={() => {}} removeBlog={() => {}}/>
     )
     fireEvent.click(component.getByText('view'))
     expect(component.container.querySelector('.blog-url')).toHaveTextContent('test-url')
     expect(component.container.querySelector('.blog-likes')).toHaveTextContent('Likes:233')
-  } )
+  })
+
+  test('two likes click', () => {
+    const mockLikeHandler = jest.fn()
+    const component = render(
+      <Blog blog={blog} likeBlog={mockLikeHandler} removeBlog={() => {}}/>
+    )
+    fireEvent.click(component.getByText('view'))
+    fireEvent.click(component.getByText('like'))
+    fireEvent.click(component.getByText('like'))
+    expect(mockLikeHandler.mock.calls).toHaveLength(2)
+  })
 })
