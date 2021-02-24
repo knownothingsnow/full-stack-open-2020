@@ -16,10 +16,10 @@ describe('test for blog component',() => {
     const component = render(
       <Blog blog={blog} likeBlog={() => {}} removeBlog={() => {}}/>
     )
-
+    // component.debug()
     expect(component.container.querySelector('.blog-title')).toHaveTextContent('test-title')
     expect(component.container.querySelector('.blog-author')).toHaveTextContent('test-author')
-    expect(component.container.querySelector('.blog-author')).not.toHaveTextContent('test-url')
-    expect(component.container.querySelector('.blog-author')).not.toHaveTextContent(233)
+    expect(component.container.querySelector('.blog-url')).toBeNull()
+    expect(component.container.querySelector('.blog-likes')).toBeNull()
   })
 })
