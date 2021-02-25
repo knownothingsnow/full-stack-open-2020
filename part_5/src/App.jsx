@@ -137,15 +137,16 @@ const App = () => {
           </div>
           {blogForm()}
         </div>}
-
-      {blogs.map(blog =>
-        <Blog
-          key={blog.id}
-          blog={blog}
-          likeBlog={likeBlog}
-          removeBlog={removeBlog}
-        />
-      )}
+      <div id="blogs">
+        {blogs.map(blog =>
+          <Blog
+            key={blog.id}
+            blog={blog}
+            likeBlog={likeBlog}
+            removeBlog={removeBlog}
+          />
+        )}
+      </div>
     </div>
   )
 }

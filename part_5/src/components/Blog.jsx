@@ -14,7 +14,7 @@ const Blog = ({ blog, likeBlog, removeBlog }) => {
   const toggleExtend = () => { setExtend(!extend) }
 
   return (
-    <div style={blogStyle}>
+    <div className="aBlog" style={blogStyle}>
       <p>
         <span className="blog-title">{blog.title}</span>
         <span className="blog-author">{blog.author}</span>

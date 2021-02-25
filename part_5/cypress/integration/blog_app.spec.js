@@ -7,6 +7,9 @@ describe('Blog app', function() {
       'password': '123'
     })
     cy.visit('http://localhost:3000')
+    cy.get('form').find('input[name=username]').as('username')
+    cy.get('form').find('input[name=password]').as('password')
+    cy.get('form').children('button').contains('login').as('loginBtn')
   })
 
   it('Login form is shown', function() {
@@ -19,12 +22,6 @@ describe('Blog app', function() {
   })
 
   describe('Login', function () {
-    beforeEach(function () {
-      cy.get('form').find('input[name=username]').as('username')
-      cy.get('form').find('input[name=password]').as('password')
-      cy.get('form').children('button').contains('login').as('loginBtn')
-    })
-
     it('succeeds with correct credentials', function() {
       cy.contains('login here').click()
       cy.get('@username').type('zhang')
@@ -44,4 +41,26 @@ describe('Blog app', function() {
         .should('have.css', 'color', 'rgb(255, 0, 0)')
     })
   })
+
+  describe.only('When logged in', function() {
+    beforeEach(function () {
+      cy.contains('login here').click()
+      cy.get('@username').type('zhang')
+      cy.get('@password').type('123')
+      cy.get('@loginBtn').click()
+    })
+
+    it('A blog can be created', function () {
+      cy.get('#blogs').children().should('not.exist')
+      cy.contains('new blog').click()
+      cy.get('form').find('input[name=title]').as('title').type('A new way to test')
+      cy.get('form').find('input[name=author]').as('author').type('zhang san')
+      cy.get('form').find('input[name=url]').as('url').type('some-genius.dev')
+      cy.get('form').children('button').click()
+      cy.get('#blogs').children().should('have.length', 1)
+      cy.get('#blogs').first().get('.blog-title').contains('A new way to test')
+      cy.get('#blogs').first().get('.blog-author').contains('zhang san')
+    })
+  })
+
 })
