@@ -13,14 +13,17 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^7.2.1",
+    "cypress": "^6.5.0",
     "eslint": "^7.18.0",
+    "eslint-plugin-cypress": "^2.11.2",
     "eslint-plugin-jest": "^24.1.5"
   },
   "scripts": {
     "start": "BROWSER='microsoft edge dev' react-scripts start",
     "build": "react-scripts build",
     "test": "CI=true react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cypress:open": "cypress open"
   },
   "browserslist": {
     "production": [
