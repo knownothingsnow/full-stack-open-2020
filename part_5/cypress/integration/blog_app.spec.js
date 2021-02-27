@@ -44,14 +44,11 @@ describe('Blog app', function() {
 
   describe.only('When logged in', function() {
     beforeEach(function () {
-      cy.contains('login here').click()
-      cy.get('@username').type('zhang')
-      cy.get('@password').type('123')
-      cy.get('@loginBtn').click()
+      cy.login({ username: 'zhang', password: '123' })
+      cy.get('#blogs').children().should('not.exist')
     })
 
     it('A blog can be created', function () {
-      cy.get('#blogs').children().should('not.exist')
       cy.contains('new blog').click()
       cy.get('form').find('input[name=title]').as('title').type('A new way to test')
       cy.get('form').find('input[name=author]').as('author').type('zhang san')
@@ -61,6 +58,18 @@ describe('Blog app', function() {
       cy.get('#blogs').first().get('.blog-title').contains('A new way to test')
       cy.get('#blogs').first().get('.blog-author').contains('zhang san')
     })
-  })
 
+    describe.only('manipulate a blog', function () {
+      beforeEach(function () {
+        cy.createBlog('a regular blog', 'a regular guy', 'a regular url')
+      })
+      it('add like of a blog', function () {
+        cy.contains('view').click()
+        cy.get('.blog-likes').contains('like')
+          .click().parent().contains('Likes:1').contains('like')
+          .click().parent().contains('Likes:2').contains('like')
+          .click().parent().contains('Likes:3')
+      })
+    })
+  })
 })
