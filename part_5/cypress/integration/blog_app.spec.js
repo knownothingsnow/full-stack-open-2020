@@ -62,6 +62,13 @@ describe('Blog app', function() {
     describe.only('manipulate a blog', function () {
       beforeEach(function () {
         cy.createBlog('a regular blog', 'a regular guy', 'a regular url')
+          .then(() => {
+            return cy.request('POST', 'http://localhost:3001/api/users', {
+              'username': 'lee',
+              'name': 'si',
+              'password': '123'
+            })
+          })
       })
       it('add like of a blog', function () {
         cy.contains('view').click()
@@ -69,6 +76,19 @@ describe('Blog app', function() {
           .click().parent().contains('Likes:1').contains('like')
           .click().parent().contains('Likes:2').contains('like')
           .click().parent().contains('Likes:3')
+      })
+      it.only('delete a blog', function () {
+        cy.createBlog('a regular blog2', 'a regular guy2', 'a regular url2')
+        cy.get('.blog-toggle').first().click()
+        cy.get('.aBlog').first().contains('remove').click()
+        cy.get('#blogs').children().should('have.length', 1)
+        cy.contains('logout!').click()
+        cy.login({ username: 'lee', password: '123' })
+        cy.get('.blog-toggle').first().click()
+        cy.get('.aBlog').first().contains('remove').click()
+        cy.get('.message.error')
+          .contains('delete blog a regular blog failed')
+          .should('have.css', 'color', 'rgb(255, 0, 0)')
       })
     })
   })

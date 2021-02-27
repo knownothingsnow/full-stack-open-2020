@@ -18,7 +18,7 @@ const Blog = ({ blog, likeBlog, removeBlog }) => {
       <p>
         <span className="blog-title">{blog.title}</span>
         <span className="blog-author">{blog.author}</span>
-        <button onClick={toggleExtend}>{extend ? 'hide' : 'view'}</button>
+        <button className="blog-toggle" onClick={toggleExtend}>{extend ? 'hide' : 'view'}</button>
       </p>
       {extend &&
         <>
