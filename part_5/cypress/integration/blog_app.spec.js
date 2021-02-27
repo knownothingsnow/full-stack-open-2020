@@ -42,7 +42,7 @@ describe('Blog app', function() {
     })
   })
 
-  describe.only('When logged in', function() {
+  describe('When logged in', function () {
     beforeEach(function () {
       cy.login({ username: 'zhang', password: '123' })
       cy.get('#blogs').children().should('not.exist')
@@ -59,7 +59,7 @@ describe('Blog app', function() {
       cy.get('#blogs').first().get('.blog-author').contains('zhang san')
     })
 
-    describe.only('manipulate a blog', function () {
+    describe('manipulate a blog', function () {
       beforeEach(function () {
         cy.createBlog('a regular blog', 'a regular guy', 'a regular url')
           .then(() => {
@@ -77,7 +77,7 @@ describe('Blog app', function() {
           .click().parent().contains('Likes:2').contains('like')
           .click().parent().contains('Likes:3')
       })
-      it.only('delete a blog', function () {
+      it('delete a blog', function () {
         cy.createBlog('a regular blog2', 'a regular guy2', 'a regular url2')
         cy.get('.blog-toggle').first().click()
         cy.get('.aBlog').first().contains('remove').click()
@@ -89,6 +89,21 @@ describe('Blog app', function() {
         cy.get('.message.error')
           .contains('delete blog a regular blog failed')
           .should('have.css', 'color', 'rgb(255, 0, 0)')
+      })
+      it('blog sorted by likes descending', function () {
+        cy.createBlog('a regular blog-22', 'a regular guy-22', 'a regular url-22', 22)
+        cy.createBlog('a regular blog-33', 'a regular guy-33', 'a regular url-33', 33)
+        cy.createBlog('a regular blog-44', 'a regular guy-44', 'a regular url-44', 44)
+        cy.get('.blog-toggle').each(($el, index, $list) => {
+          $el.click()
+        })
+        const strs = []
+        cy.get('#blogs').children().should('have.length', 4)
+        cy.get('.blog-likes-number').each(($ele, index, $list) => {
+          strs.push($ele.text())
+        }).then(() => {
+          expect(strs).to.deep.equal(['44', '33', '22', '0'])
+        })
       })
     })
   })

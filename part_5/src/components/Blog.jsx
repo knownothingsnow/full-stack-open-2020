@@ -23,7 +23,10 @@ const Blog = ({ blog, likeBlog, removeBlog }) => {
       {extend &&
         <>
           <p className="blog-url">{blog.url}</p>
-          <p className="blog-likes">Likes:{blog.likes} <button onClick={() => { likeBlog(blog) }}>like</button></p>
+          <p className="blog-likes">Likes:
+            <span className="blog-likes-number">{blog.likes}</span>
+            <button onClick={() => { likeBlog(blog) }}>like</button>
+          </p>
           <p>{blog.user?.username}</p>
           <button onClick={() => { removeBlog(blog) }}>remove</button>
         </>}
