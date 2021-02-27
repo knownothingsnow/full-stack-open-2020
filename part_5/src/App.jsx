@@ -82,6 +82,7 @@ const App = () => {
     try {
       await blogService.likeThis({
         ...blog,
+        user: blog.user.id,
         likes: blog.likes + 1
       })
       const newBlogs = await blogService.getAll()
