@@ -24,11 +24,15 @@ const reducer = (state = initialState, action) => {
     case 'add-vote': {
       const id = action.data.id
       const oldAnecdote = state.find(i => i.id === id)
-      const newAnecdote = {
+      const aAnecdote = {
         ...oldAnecdote,
         votes: oldAnecdote.votes+1
       }
-      return state.map(i =>i.id !== id ? i : newAnecdote )
+      return state.map(i =>i.id !== id ? i : aAnecdote )
+    }
+      
+    case 'add-anecdote': {
+      return [...state,action.data]
     }
   
     default:
@@ -41,6 +45,17 @@ export const addVote = (id) => {
   return {
     type: 'add-vote',
     data: {id}
+  }
+}
+
+export const addAnecdote = (content) => {
+  return {
+    type: 'add-anecdote',
+    data: {
+      content,
+      id: getId(),
+      votes: 0
+    }
   }
 }
 
