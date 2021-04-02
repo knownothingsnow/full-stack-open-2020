@@ -1,11 +1,8 @@
-const initialState = 'initial msg'
+const initialState = ''
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'msg': {
-      state = {
-        ...state,
-        msg:action.msg
-      }
+      state = action.msg
       break
     }
     default:
