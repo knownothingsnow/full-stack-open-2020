@@ -1,5 +1,3 @@
-const getId = () => (100000 * Math.random()).toFixed(0)
-
 const reducer = (state = [], action) => {
   switch (action.type) {
     case 'add-vote': {
@@ -40,14 +38,10 @@ export const addVote = (id) => {
   }
 }
 
-export const addAnecdote = (content) => {
+export const create = (data) => {
   return {
     type: 'add-anecdote',
-    data: {
-      content,
-      id: getId(),
-      votes: 0
-    }
+    data
   }
 }
 
