@@ -8,6 +8,7 @@ dependencies:
   react-redux: 7.2.3_8436876974e3dcafae98d64b636de192
   react-scripts: 4.0.2_react@17.0.2
   redux: 4.0.5
+  redux-thunk: 2.3.0
   web-vitals: 1.1.1
 devDependencies:
   json-server: 0.16.3
@@ -11572,6 +11573,11 @@ packages:
     resolution:
       integrity: sha1-a3ZOgCi1B63LdaHK55D3Hmvgiuc=
       tarball: redux-devtools-extension/download/redux-devtools-extension-2.13.9.tgz
+  /redux-thunk/2.3.0:
+    dev: false
+    resolution:
+      integrity: sha1-UcLBmhhe1Rh6qpotCLZm0NZGdiI=
+      tarball: redux-thunk/download/redux-thunk-2.3.0.tgz
   /redux/4.0.5:
     dependencies:
       loose-envify: 1.4.0
@@ -14456,4 +14462,5 @@ specifiers:
   react-scripts: 4.0.2
   redux: ^4.0.5
   redux-devtools-extension: ^2.13.9
+  redux-thunk: ^2.3.0
   web-vitals: ^1.1.0

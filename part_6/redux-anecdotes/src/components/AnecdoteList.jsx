@@ -6,11 +6,9 @@ import anecdoteService from '../services/anecdote.js'
 
 const AnecdoteList = () => {
   const dispatch = useDispatch()
-  
+
   useEffect(() => {
-    anecdoteService.getAll().then((res) => {
-      dispatch(initializeAnecdote(res))
-    })
+    dispatch(initializeAnecdote())
   }, [dispatch])
   
   const anecdotes = useSelector(state => {
