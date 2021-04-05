@@ -2,7 +2,6 @@ import React, { useEffect} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Filter from './Filter'
 import { addVote,initializeAnecdote } from '../reducers/anecdoteReducer.js'
-import anecdoteService from '../services/anecdote.js'
 
 const AnecdoteList = () => {
   const dispatch = useDispatch()
