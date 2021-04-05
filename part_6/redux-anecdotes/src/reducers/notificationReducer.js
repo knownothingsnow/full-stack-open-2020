@@ -11,6 +11,11 @@ const reducer = (state = initialState, action) => {
   return state
 }
 
-export const newMsg = (msg) => ({ type: 'msg', msg })
+export const newMsg = (msg,delay) => (dispatch) => {
+  dispatch({ type: 'msg', msg })
+  setTimeout(() => {
+    dispatch({ type: 'msg', msg:'' })
+  },delay*1000)
+}
 
 export default reducer

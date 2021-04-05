@@ -7,12 +7,7 @@ const AnecdoteForm = () => {
   const dispatch = useDispatch()
 
   const showMsg = ({ content,delay}) => {
-    dispatch(newMsg(content))
-    if (delay) {
-      setTimeout(() => {
-        dispatch(newMsg(''))
-      },delay*1000)
-    }
+    dispatch(newMsg(content,delay))
   }
 
   const newAnecdote = async (e) => {
