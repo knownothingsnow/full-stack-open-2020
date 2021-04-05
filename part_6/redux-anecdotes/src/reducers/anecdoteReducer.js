@@ -40,11 +40,12 @@ export const addVote = (id) => {
   }
 }
 
-export const create = (data) => {
-  return {
+export const create = (content) => async (dispatch) => {
+  const newAnecdote = await anecdoteService.create(content)
+  dispatch({
     type: 'add-anecdote',
-    data
-  }
+    data: newAnecdote
+  })
 }
 
 export default reducer

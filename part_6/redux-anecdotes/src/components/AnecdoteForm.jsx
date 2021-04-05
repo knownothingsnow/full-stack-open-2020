@@ -18,10 +18,8 @@ const AnecdoteForm = () => {
 
   const newAnecdote = async (e) => {
     e.preventDefault()
-    const content = e.target.anecdote.value
     showMsg({ content: 'new anecdote added', delay: 5 })
-    const aAnecdote = await anecdoteService.create(content)
-    dispatch(create(aAnecdote))
+    dispatch(create(e.target.anecdote.value))
   }
 
   return <>
