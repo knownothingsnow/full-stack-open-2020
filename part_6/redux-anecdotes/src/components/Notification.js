@@ -8,13 +8,11 @@ const Notification = () => {
     borderWidth: 1
   }
 
-  const notification = useSelector(state => state.notification)
+  const {msg} = useSelector(state => state.notification)
 
-  if (!notification) {
-    return null
-  }
+  if (!msg) return null
   return (
-    <div style={style}>{notification}</div>
+    <div style={style}>{msg}</div>
   )
 }
 
