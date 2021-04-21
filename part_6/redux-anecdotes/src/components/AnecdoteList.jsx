@@ -1,30 +1,20 @@
 import React, { useEffect} from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 import Filter from './Filter'
 import { addVote,initializeAnecdote } from '../reducers/anecdoteReducer.js'
 
-const AnecdoteList = () => {
-  const dispatch = useDispatch()
-
+const AnecdoteList = (props) => {
   useEffect(() => {
-    dispatch(initializeAnecdote())
-  }, [dispatch])
-  
-  const anecdotes = useSelector(state => {
-    if (!state.filter) return state.anecdotes
-    return state.anecdotes.filter(({content,vote}) => {
-      if (!content.match(new RegExp(state.filter, 'g'))) return null
-        return { content, vote }
-    })
-  })
+    props.initializeAnecdote()
+  }, [])
 
   const vote = (id) => {
-    dispatch(addVote(id))
+    props.addVote(id)
   }
 
   return <>
       <Filter/>
-      {anecdotes.sort((a, b) => b.votes-a.votes).map(anecdote =>
+      {props.anecdotes.sort((a, b) => b.votes-a.votes).map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
@@ -38,4 +28,15 @@ const AnecdoteList = () => {
   </>
 }
 
-export default AnecdoteList
+export default connect((state) => {
+  if (!state.filter) return {anecdotes:state.anecdotes}
+  return {
+    anecdotes: state.anecdotes.filter(({ content, vote }) => {
+      if (!content.match(new RegExp(state.filter, 'g'))) return null
+      return { content, vote }
+    })
+  }
+ }, {
+  initializeAnecdote,
+  addVote
+})(AnecdoteList)
