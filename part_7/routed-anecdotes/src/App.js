@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link, Switch, Route, useParams, useHistory } from 'react-router-dom'
+import { Link, Switch, Route, useHistory, useRouteMatch } from 'react-router-dom'
 
 const Menu = ({ notification }) => {
   const padding = {
@@ -24,11 +24,7 @@ const AnecdoteList = ({ anecdotes }) => (
   </div>
 )
 
-const Anecdote = ({ anecdotes, anecdoteById }) => {
-  const { id } = useParams()
-  const { content } = anecdoteById(id)
-  return <h2>{content}</h2>
-}
+const Anecdote = ({ anecdote }) => <h2>{anecdote.content}</h2>
 
 const About = () => (
   <div>
@@ -135,12 +131,15 @@ const App = () => {
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   }
 
+  const match = useRouteMatch('/anecdotes/:id')
+  const anecdote = match ? anecdoteById(match.params.id) : null
+
   return (
     <div>
       <h1>Software anecdotes</h1>
       <Menu notification={notification} />
       <Switch>
-        <Route path='/anecdotes/:id'><Anecdote anecdotes={anecdotes} anecdoteById={anecdoteById} /></Route>
+        <Route path='/anecdotes/:id'><Anecdote anecdote={anecdote} /></Route>
         <Route path='/about'><About /></Route>
         <Route path='/create'><CreateNew addNew={addNew} setNotification={setNotification} /></Route>
         <Route path='/'><AnecdoteList anecdotes={anecdotes} /></Route>
